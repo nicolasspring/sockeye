@@ -318,6 +318,9 @@ def add_extract_args(params):
     extract_params.add_argument('--list-all', '-l',
                                 action='store_true',
                                 help='List names of all available parameters.')
+    extract_params.add_argument('--save-mx-nd',
+                                action='store_true',
+                                help='Save params as an mx.nd.array object.')
     extract_params.add_argument('--output', '-o',
                                 type=str,
                                 help="File to write extracted parameters to (in .npz format).")

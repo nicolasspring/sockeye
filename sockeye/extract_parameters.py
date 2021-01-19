@@ -85,6 +85,42 @@ def extract(param_path: str,
     return ext_params
 
 
+def extract_mx_nd(param_path: str, param_names: List[str], list_all: bool):
+    """
+    Extract specific parameters given their names and
+    save as an mx.nd.array object.
+
+    :param param_path: Path to the parameter file.
+    :param param_names: Names of parameters to be extracted.
+    :param list_all: List names of all available parameters.
+    :return: Extracted parameter dictionary.
+    """
+    logger.info("Loading parameters from '%s'", param_path)
+    params = mx.nd.load(param_path)
+    new_params = {}
+    not_found = []
+    for name in param_names:
+        if name in params:
+            logger.info("\tFound '%s': shape=%s", name, str(params[name].shape))
+            new_params[name] = params[name]
+        else:
+            not_found.append(name)
+
+    if len(not_found) > 0:
+        logger.info("The following parameters were not found:")
+        for name in not_found:
+            logger.info("\t%s", name)
+        logger.info("Check the following availabilities")
+        list_all = True
+
+    if list_all:
+        if params:
+            logger.info("Available arg parameters:")
+            for name in params:
+                logger.info("\t%s: shape=%s", name, str(params[name].shape))
+    return new_params
+
+
 def main():
     """
     Commandline interface to extract parameters.
@@ -103,12 +139,18 @@ def extract_parameters(args: argparse.Namespace):
         param_path = os.path.join(args.input, C.PARAMS_BEST_NAME)
     else:
         param_path = args.input
-    extracted_parameters = extract(param_path, args.names, args.list_all)
 
-    if len(extracted_parameters) > 0:
-        utils.check_condition(args.output is not None, "An output filename must be specified. (Use --output)")
-        logger.info("Writing extracted parameters to '%s'", args.output)
-        np.savez_compressed(args.output, **extracted_parameters)
+    if not args.save_mx_nd:
+        extracted_parameters = extract(param_path, args.names, args.list_all)
+
+        if len(extracted_parameters) > 0:
+            utils.check_condition(args.output is not None, "An output filename must be specified. (Use --output)")
+            logger.info("Writing extracted parameters to '%s'", args.output)
+            np.savez_compressed(args.output, **extracted_parameters)
+
+    else:
+        extracted_parameters = extract_mx_nd(param_path, args.names, args.list_all)
+        mx.nd.save(args.output, extracted_parameters)
 
 
 if __name__ == "__main__":
