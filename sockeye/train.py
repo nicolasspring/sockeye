@@ -867,6 +867,9 @@ def fixed_param_names_from_stragegy(config: model.ModelConfig,
         if strategy == C.FIXED_PARAM_STRATEGY_ALL_EXCEPT_DECODER:
             # Any decoder layer.
             return not name.startswith(C.DECODER_PREFIX)
+        if strategy == C.FIXED_PARAM_STRATEGY_DECODER:
+            # Opposite of C.FIXED_PARAM_STRATEGY_ALL_EXCEPT_DECODER.
+            return name.startswith(C.DECODER_PREFIX)
         if strategy == C.FIXED_PARAM_STRATEGY_ALL_EXCEPT_OUTER_LAYERS:
             # First and last encoder and decoder layers.
             return not (name.startswith("{}{}".format(C.TRANSFORMER_ENCODER_PREFIX, 0)) or
