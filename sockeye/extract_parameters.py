@@ -150,7 +150,10 @@ def extract_parameters(args: argparse.Namespace):
 
     else:
         extracted_parameters = extract_mx_nd(param_path, args.names, args.list_all)
-        mx.nd.save(args.output, extracted_parameters)
+        if extracted_parameters:
+            utils.check_condition(args.output is not None, "An output filename must be specified. (Use --output)")
+            logger.info("Writing extracted parameters to '%s'", args.output)
+            mx.nd.save(args.output, extracted_parameters)
 
 
 if __name__ == "__main__":
