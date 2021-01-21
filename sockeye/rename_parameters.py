@@ -59,7 +59,7 @@ def rename_parameters(args: argparse.Namespace):
             if to_name in params:
                 logger.info("\tOverwriting '%s': shape=%s", to_name, str(params[to_name].shape))
             else:
-                logger.info("\tCreating '%s': shape=%s", to_name, str(params[to_name].shape))
+                logger.info("\tCreating '%s': shape=%s", to_name, str(params[from_name].shape))
             params[to_name] = params[from_name]
             if not args.copy:
                 logger.info("\tRemoving '%s': shape=%s", from_name, str(params[from_name].shape))
