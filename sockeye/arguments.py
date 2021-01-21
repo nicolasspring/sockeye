@@ -1393,3 +1393,16 @@ def add_init_embedding_args(params):
                         help='File to write initialized parameters to.')
     params.add_argument('--encoding', '-c', type=str, default=C.VOCAB_ENCODING,
                         help='Open input vocabularies with specified encoding. Default: %(default)s.')
+
+
+def add_rename_parameters_args(params):
+    params.add_argument('--params-in', '-i', required=True, type=str,
+                        help='The input parameters.')
+    params.add_argument('--params-out', '-o', required=True, type=str,
+                        help='The output parameters.')
+    params.add_argument('--rename-from', '-f', nargs='+', type=str,
+                        help='List of parameters to rename or copy.')
+    params.add_argument('--rename-to', '-t', nargs='+', type=str,
+                        help='List of names for renaming the parameters.')
+    params.add_argument('--copy', '-c', action='store_true',
+                        help='If set, parameters will not be renamed but copied to the new names')
