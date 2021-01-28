@@ -1406,3 +1406,13 @@ def add_rename_parameters_args(params):
                         help='List of names for renaming the parameters.')
     params.add_argument('--copy', '-c', action='store_true',
                         help='If set, parameters will not be renamed but copied to the new names')
+
+
+def add_combine_parameters_args(params):
+    params.add_argument('--params-in', '-i', required=True, type=str, nargs="+",
+                        help=(
+                            'One or more input parameter files. If a parameter occurs '
+                            'in multiple files, it is being overwritten in the order of the files.')
+                        )
+    params.add_argument('--params-out', '-o', required=True, type=str,
+                        help='The output parameter file.')
